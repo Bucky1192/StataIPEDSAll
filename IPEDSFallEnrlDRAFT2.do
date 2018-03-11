@@ -174,16 +174,12 @@ cd "$wkdgbl"                                                    // Change back t
 forvalues yindex = 2002 / 2016 {
 	//Copy, unzip, and import data files.
 	copy https://nces.ed.gov/ipeds/datacenter/data/EF`yindex'B_Data_Stata.zip .
-	unzipfile EF`yindex'B_Data_Stata.zip
-	import delimited EF`yindex'B_Data_Stata.csv, clear
-	
-	//Add isYr index and order new variable. 
-	//gen int isYr = `yindex'
-	//order isYr, after (unitid)
+	unzipfile EF`yindex'B_Data_Stata.zip, replace
 
 	//Download the NCES provided do file for B series 
 	copy https://nces.ed.gov/ipeds/datacenter/data/EF`yindex'B_Stata.zip .
 	unzipfile EF`yindex'B_Stata.zip, replace 
+	
 
 	//Read do file into scalar for modification. 
 	scalar fcontents = fileread("EF`yindex'B.do")
@@ -199,10 +195,11 @@ forvalues yindex = 2002 / 2016 {
 
 	//Save, rename, and run the revised and working do file. 
 	scalar byteswritten = filewrite("EF`yindex'b.do", fcontents, 1)
+	
 
 	// File name convetions not consistent through the years.
-	// 2007-2015 provide _rv_ editions of the data.
-	if `yindex' > 2006 & `yindex' < 2016 {
+	// 2007-2014   provide _rv_ editions of the data.
+	if `yindex' > 2006 & `yindex' < 2015 {
 		import delimited ef`yindex'b_rv_data_stata.csv, clear
 	}
 	else {
@@ -212,7 +209,21 @@ forvalues yindex = 2002 / 2016 {
 	di "QUIET RUN OF EF`yindex'b.do" 
 	qui do EF`yindex'b
 	di `sp'
+	
+	rename 	EFAGE01	fttotm		// Full time total men
+	rename	EFAGE02 fttotw		// Full time total women
+	rename	EFAGE03 pttotm		// Part time total men
+	rename	EFAGE04 pttotw		// Part time total women
+	rename	EFAGE05 ftgtot		// Full time grand total
+	rename	EFAGE06 ptgtot		// Part time grand total 
+	rename	EFAGE07 totlmn		// Total men
+	rename	EFAGE08 totlwm		// Total women
+	rename	EFAGE09 grndtl		// Grand total, both men and women
 
+	// Add isYr index and order new variable. 
+	gen int isYr = `yindex'
+	order isYr, after (unitid)
+	
 	compress 
 	saveold EF`yindex'B_data_stata.dta, replace version (13)
 	di `sp'
