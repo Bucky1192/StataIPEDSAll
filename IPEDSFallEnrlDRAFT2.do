@@ -208,17 +208,21 @@ forvalues yindex = 2002 / 2016 {
 
 	di "QUIET RUN OF EF`yindex'b.do" 
 	qui do EF`yindex'b
+	drop x*
 	di `sp'
 	
-	rename 	EFAGE01	fttotm		// Full time total men
-	rename	EFAGE02 fttotw		// Full time total women
-	rename	EFAGE03 pttotm		// Part time total men
-	rename	EFAGE04 pttotw		// Part time total women
-	rename	EFAGE05 ftgtot		// Full time grand total
-	rename	EFAGE06 ptgtot		// Part time grand total 
-	rename	EFAGE07 totlmn		// Total men
-	rename	EFAGE08 totlwm		// Total women
-	rename	EFAGE09 grndtl		// Grand total, both men and women
+	rename 	efage01	fttotm		// Full time total men
+	rename	efage02 fttotw		// Full time total women
+	rename	efage03 pttotm		// Part time total men
+	rename	efage04 pttotw		// Part time total women
+	rename	efage05 ftgtot		// Full time grand total
+	rename	efage06 ptgtot		// Part time grand total 
+	rename	efage07 totlmn		// Total men
+	rename	efage08 totlwm		// Total women
+	rename	efage09 grndtl		// Grand total, both men and women
+	rename  efbage  agecat		// Age category
+	rename  line    orglin		// Original line number on survey form
+	rename  lstudy  levstd		// Level of student
 
 	// Add isYr index and order new variable. 
 	gen int isYr = `yindex'
