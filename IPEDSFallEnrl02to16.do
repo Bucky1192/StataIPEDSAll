@@ -124,8 +124,7 @@ forvalues yindex = 2002 / 2016 {
 	levelsof efalevel, local(levels)
 	local lbe : value label efalevel
 	foreach l of local levels {
-		local f`l' : label `lbe' `l'
-		local ms_`l' = "`f`l''" 
+		local ms_`l' : label `lbe' `l'
 		local ms_`l' = subinstr("`ms_`l''","student","stdt",.)
 		local ms_`l' = subinstr("`ms_`l''","Undergraduate","Ugrd",.)
 		local ms_`l' = subinstr("`ms_`l''","Graduate","Grad",.)
