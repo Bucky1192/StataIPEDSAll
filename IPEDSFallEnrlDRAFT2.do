@@ -78,44 +78,59 @@ forvalues yindex = 2002 / 2016 {
 	rename	efage07 totlmn		// Total men
 	rename	efage08 totlwm		// Total women
 	rename	efage09 grndtl		// Grand total, both men and women
-	
-	// Add isYr index and order new variable. 
-	gen int isYr = `yindex'
-	order isYr, after (unitid)
-	
-	compress 
-	saveold EF`yindex'B_data_stata.dta, replace version (13)
-	di `sp'
-	clear
-	
-	/*local thevars fttotm fttotw pttotm pttotw ftgtot ///
+
+	// Establish local for varlist
+	local thevars fttotm fttotw pttotm pttotw ftgtot ///
 	ptgtot totlmn totlwm grndtl 
 	
+	// Loop to save variable label names for reapplication after reshape
 	foreach varname in `thevars' {
 		local l`varname' : variable label `varname'
 }
 
-	keep unitid lstudy `thevars'
+	// Simplfy the dataset
+	keep if lstudy == 2                  // Keeping undergraduate lstudy.
+	keep unitid efbage `thevars'
 	
-	levelsof lstudy, local (levels)
-	local lbe : value lable efalevel 
+	levelsof efbage, local(levels)
+	local lbe : value label efbage 
 	foreach l of local levels {
-		local f`l' = :"`f`l''"
+		local ms_`l' : label `lbe' `l' 
 }
+
 	//Reshape
-	reshape wide `thevars', i(unitid) j(lstudy)
+	reshape wide `thevars', i(unitid) j(efbage)
 	
 	// Reapply variable label names following reshape. 
 	foreach lev of local levels {
 		foreach varname in `thevars' {
-			lavel variable `varname' `lev' "`ms_`lev'' `l`varname''"
+			label variable `varname'`lev' "`ms_`lev'' `l`varname''"
 		}
-		*/
+		
 }
-	
+
+	// Document lstudy, kept undergraduate lstudy for this dataset.
+	foreach varname of var * {
+		// Set local = to existing variable label.
+		local curlab : variable label `varname'
+		// Concatenate new text with local.
+		local newlab = "Ugrd Stus, `curlab'"
+		// use local to set new variable label.
+		label variable `varname' "`newlab'"
+	}
+	label variable unitid "Institutional unitid"
+
+	// Add isYr index and order new variable. 
+	gen int isYr = `yindex'
+	order isYr, after (unitid)
+	compress 
+	saveold EF`yindex'B_data_stata.dta, replace version (13)
+	di `sp'
+}
+
 
 use ef2016b_data_stata.dta, clear 
-forvalues yindex = 2016(-1)2002 {
+forvalues yindex = 2015(-1)2002 {
 	display "`yindex'"                                        // Output for log file.
 	append using "ef`yindex'b_data_stata.dta", force
 	di `sp'	                                                  // Spacing for log file.
