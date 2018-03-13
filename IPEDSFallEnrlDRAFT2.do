@@ -220,10 +220,7 @@ forvalues yindex = 2002 / 2016 {
 	rename	efage07 totlmn		// Total men
 	rename	efage08 totlwm		// Total women
 	rename	efage09 grndtl		// Grand total, both men and women
-	rename  efbage  agecat		// Age category
-	rename  line    orglin		// Original line number on survey form
-	rename  lstudy  levstd		// Level of student
-
+	
 	// Add isYr index and order new variable. 
 	gen int isYr = `yindex'
 	order isYr, after (unitid)
@@ -232,8 +229,32 @@ forvalues yindex = 2002 / 2016 {
 	saveold EF`yindex'B_data_stata.dta, replace version (13)
 	di `sp'
 	clear
+	
+	/*local thevars fttotm fttotw pttotm pttotw ftgtot ///
+	ptgtot totlmn totlwm grndtl 
+	
+	foreach varname in `thevars' {
+		local l`varname' : variable label `varname'
 }
 
+	keep unitid lstudy `thevars'
+	
+	levelsof lstudy, local (levels)
+	local lbe : value lable efalevel 
+	foreach l of local levels {
+		local f`l' = :"`f`l''"
+}
+	//Reshape
+	reshape wide `thevars', i(unitid) j(lstudy)
+	
+	// Reapply variable label names following reshape. 
+	foreach lev of local levels {
+		foreach varname in `thevars' {
+			lavel variable `varname' `lev' "`ms_`lev'' `l`varname''"
+		}
+		*/
+}
+	
 
 use ef2016b_data_stata.dta, clear 
 forvalues yindex = 2016(-1)2002 {
