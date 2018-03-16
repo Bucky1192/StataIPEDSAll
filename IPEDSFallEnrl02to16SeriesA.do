@@ -6,7 +6,7 @@ cls
 // from the FALL ENROLLMENT survey (A Series) at the US DOE's Integrated
 // Postsecondary Education Data Stystem.
 
-// Mar/2018:  Naiya Patel - Completed A Series/B Series forthcoming.  
+// Mar/2018:  Naiya Patel - Completed A Series.  
 // Feb/2018:  Naiya Patel - Original author, initial build.
 
 /*#############################################################################
