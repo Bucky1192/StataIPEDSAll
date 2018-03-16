@@ -3,10 +3,10 @@ clear all
 cls 
 
 // Use this code to download, build, and save to the local computer data 
-// from the FALL ENROLLMENT survey (A Series) at the US DOE's Integrated
+// from the FALL ENROLLMENT survey (B Series) at the US DOE's Integrated
 // Postsecondary Education Data Stystem.
 
-// Mar/2018:  Naiya Patel - Completed A Series/B Series forthcoming.  
+// Mar/2018:  Naiya Patel - Completed B Series.  
 // Feb/2018:  Naiya Patel - Original author, initial build.
 
 /*#############################################################################
@@ -26,8 +26,8 @@ version 13                                    // Enforce version compatibility.
 di c(pwd)                                     // Confirm working directory.
 
 //Beginning of B Series
-clear all                                              		    // Reset the workspace
-cd "$wkdgbl"                                                    // Change back to working directory.
+clear all                                     // Reset the workspace
+cd "$wkdgbl"                                  // Change back to working directory.
 
 forvalues yindex = 2002 / 2016 {
 	//Copy, unzip, and import data files.
@@ -69,15 +69,15 @@ forvalues yindex = 2002 / 2016 {
 	drop x*
 	di `sp'
 	
-	rename 	efage01	fttotm		// Full time total men
-	rename	efage02 fttotw		// Full time total women
-	rename	efage03 pttotm		// Part time total men
-	rename	efage04 pttotw		// Part time total women
-	rename	efage05 ftgtot		// Full time grand total
-	rename	efage06 ptgtot		// Part time grand total 
-	rename	efage07 totlmn		// Total men
-	rename	efage08 totlwm		// Total women
-	rename	efage09 grndtl		// Grand total, both men and women
+	rename 	efage01	fttotm	                 // Full time total men
+	rename	efage02 fttotw		             // Full time total women
+	rename	efage03 pttotm		             // Part time total men
+	rename	efage04 pttotw		             // Part time total women
+	rename	efage05 ftgtot		             // Full time grand total
+	rename	efage06 ptgtot		             // Part time grand total 
+	rename	efage07 totlmn		             // Total men
+	rename	efage08 totlwm		             // Total women
+	rename	efage09 grndtl	                 // Grand total, both men and women
 
 	// Establish local for varlist
 	local thevars fttotm fttotw pttotm pttotw ftgtot ///
@@ -89,7 +89,7 @@ forvalues yindex = 2002 / 2016 {
 }
 
 	// Simplfy the dataset
-	keep if lstudy == 2                  // Keeping undergraduate lstudy.
+	keep if lstudy == 2                      // Keeping undergraduate lstudy.
 	keep unitid efbage `thevars'
 	
 	levelsof efbage, local(levels)
